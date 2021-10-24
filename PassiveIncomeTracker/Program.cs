@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PassiveIncomeTracker.DbModels;
+using PassiveIncomeTracker.Interfaces;
+using PassiveIncomeTracker.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,16 +14,14 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DbApi>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDbString"));
+    string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
+
+builder.Services.AddTransient<ICryptocurrenciesService, CryptocurrenciesService>();
+
 var app = builder.Build();
-
-
-//builder.
-
-//services.AddDbContext<BloggingContext>(options =>
-//        options.UseSqlServer(Configuration.GetConnectionString("BloggingDatabase")));
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
