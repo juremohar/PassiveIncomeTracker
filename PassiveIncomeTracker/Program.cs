@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PassiveIncomeTracker.DbModels;
 using PassiveIncomeTracker.Interfaces;
+using PassiveIncomeTracker.Repositories;
 using PassiveIncomeTracker.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +19,9 @@ builder.Services.AddDbContext<DbApi>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
+builder.Services.AddTransient<IJwtRepository, JwtRepository>();
 
+builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICryptocurrenciesService, CryptocurrenciesService>();
 
 var app = builder.Build();

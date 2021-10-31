@@ -13,6 +13,12 @@ namespace PassiveIncomeTracker.DbModels
         [Column("email")]
         public string Email { get; set; }
 
+        [Column("password")]
+        public string Password { get; set; }
+
+        [Column("salt")]
+        public string Salt { get; set; }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [Column("inserted_at")]
         public DateTime InsertedAt { get; set; }

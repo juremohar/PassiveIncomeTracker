@@ -17,5 +17,6 @@ namespace PassiveIncomeTracker.DbModels
         public DbSet<TCryptocurrency> Cryptocurrencies { get; set; }
         public DbSet<TUserInterest> UsersInterests { get;set; } 
         public DbSet<TUserRealizedInterest> UsersRealizedInterests { get;set; } 
+        public DbSet<TSession> Sessions { get;set; } 
     }
 }
