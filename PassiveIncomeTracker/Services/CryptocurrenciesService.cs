@@ -13,7 +13,7 @@ namespace PassiveIncomeTracker.Services
             DbApi db
         )
         { 
-            _db = db;   
+            _db = db;
         }
 
         public void Insert(InsertCryptocurrencyModel model)

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PassiveIncomeTracker.DbModels;
 using PassiveIncomeTracker.Interfaces;
+using PassiveIncomeTracker.Middlewares;
 using PassiveIncomeTracker.Repositories;
 using PassiveIncomeTracker.Services;
 
@@ -19,12 +20,19 @@ builder.Services.AddDbContext<DbApi>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
+
 builder.Services.AddTransient<IJwtRepository, JwtRepository>();
 
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICryptocurrenciesService, CryptocurrenciesService>();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+
 var app = builder.Build();
+
+//app.UseMiddleware<AuthMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
