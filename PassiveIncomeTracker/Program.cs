@@ -26,6 +26,8 @@ builder.Services.AddTransient<IJwtRepository, JwtRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICryptocurrenciesService, CryptocurrenciesService>();
 
+builder.Services.AddTransient<IUserInterestService, UserInterestService>();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
