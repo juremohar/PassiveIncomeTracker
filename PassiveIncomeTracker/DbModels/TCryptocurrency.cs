@@ -19,8 +19,8 @@ namespace PassiveIncomeTracker.DbModels
         [Column("price")]
         public double Price { get; set; }
 
-        [Column("thumbnail_url")]
-        public string ThumbnailUrl { get; set; }
+        [Column("coinmarketcap_id")]
+        public int CoinMarketCapId { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [Column("inserted_at")]

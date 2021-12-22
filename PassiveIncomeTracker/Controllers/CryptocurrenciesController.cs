@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PassiveIncomeTracker.ApiModels;
+using PassiveIncomeTracker.DbModels;
 using PassiveIncomeTracker.Interfaces;
 
 namespace PassiveIncomeTracker.Controllers
@@ -18,37 +19,16 @@ namespace PassiveIncomeTracker.Controllers
             _cryptocurrenciesService = cryptocurrenciesService; 
         }
 
-        // GET: api/<CryptocurrenciesController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("updateCryptoWithLatestData")]
+        public async Task UpdateCryptoWithLatestData()
         {
-            return new string[] { "value1", "value2" };
+            await _cryptocurrenciesService.UpdateCryptoWithLatestData();
         }
 
-        // GET api/<CryptocurrenciesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<CryptocurrenciesController>
         [HttpPost]
         public void Post([FromBody] InsertCryptocurrencyModel model)
         {
             _cryptocurrenciesService.Insert(model);
-        }
-
-        // PUT api/<CryptocurrenciesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<CryptocurrenciesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

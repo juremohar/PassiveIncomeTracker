@@ -1,9 +1,11 @@
 ﻿using PassiveIncomeTracker.ApiModels;
+using PassiveIncomeTracker.DbModels;
 
 namespace PassiveIncomeTracker.Interfaces
 {
     public interface ICryptocurrenciesService
     {
-        public void Insert(InsertCryptocurrencyModel model);
+        void Insert(InsertCryptocurrencyModel model);
+        Task UpdateCryptoWithLatestData();
     }
 }

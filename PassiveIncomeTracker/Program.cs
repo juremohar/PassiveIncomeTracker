@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PassiveIncomeTracker.DbModels;
 using PassiveIncomeTracker.Interfaces;
 using PassiveIncomeTracker.Middlewares;
+using PassiveIncomeTracker.OutsideServices;
 using PassiveIncomeTracker.Repositories;
 using PassiveIncomeTracker.Services;
 
@@ -22,6 +23,7 @@ builder.Services.AddDbContext<DbApi>(options =>
 
 
 builder.Services.AddTransient<IJwtRepository, JwtRepository>();
+builder.Services.AddTransient<ICoinMarketCapService, CoinMarketCapService>();
 
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICryptocurrenciesService, CryptocurrenciesService>();
