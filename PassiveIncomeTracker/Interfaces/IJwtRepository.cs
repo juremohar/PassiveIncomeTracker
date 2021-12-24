@@ -4,7 +4,7 @@ namespace PassiveIncomeTracker.Interfaces
 {
     public interface IJwtRepository
     {
-        public string Encode(LoggedInUserModel model);
-        public LoggedInUserModel Decode(string jwt);
+        string Encode(LoggedInUserModel model);
+        LoggedInUserModel Decode(string jwt);
     }
 }

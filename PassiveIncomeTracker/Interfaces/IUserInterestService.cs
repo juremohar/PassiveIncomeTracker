@@ -5,10 +5,10 @@ namespace PassiveIncomeTracker.Interfaces
 {
     public interface IUserInterestService
     {
-        public void InsertInterest(InsertInterestModel model);
-        public void UpdateInterest(int id, UpdateInterestModel model);  
-        public void DeleteInterest(int id);
-        public List<InterestModel> GetInterests(GetInterestFilterModel model); // TODO: this needs to be more generic  
-        public InterestModel GetInterestById(int id);
+        void InsertInterest(InsertInterestModel model);
+        void UpdateInterest(int id, UpdateInterestModel model);
+        void DeleteInterest(int id);
+        List<InterestModel> GetInterests(GetInterestFilterModel model); // TODO: this needs to be more generic  
+        InterestModel GetInterestById(int id);
     }
 }

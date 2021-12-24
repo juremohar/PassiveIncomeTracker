@@ -11,11 +11,9 @@ namespace PassiveIncomeTracker.DbModels
         public int IdUserRealizedInterest { get; set; }
 
         [Column("id_user")]
-        [ForeignKey("User")]
         public int IdUser { get; set; }
 
         [Column("id_cryptocurrency")]
-        [ForeignKey("Cryptocurrency")]
         public int IdCryptocurrency { get; set; }
 
         [Column("total_amount")]
@@ -33,9 +31,11 @@ namespace PassiveIncomeTracker.DbModels
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [Column("inserted_at")]
         public DateTime InsertedAt { get; set; }
-        
+
+        [ForeignKey("IdUser")]
         public TUser User { get; set; }
 
+        [ForeignKey("IdCryptoCurrency")]
         public TCryptocurrency Cryptocurrency { get; set; }
     }
 }

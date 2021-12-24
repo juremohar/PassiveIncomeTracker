@@ -19,18 +19,6 @@ namespace PassiveIncomeTracker.Controllers
             _userInterestService = userInterestService; 
         }
 
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         [HttpPost]
         public void Post([FromBody] InsertInterestModel model)
         {
@@ -41,11 +29,6 @@ namespace PassiveIncomeTracker.Controllers
         public void Put(int id, [FromBody] UpdateInterestModel model)
         {
             _userInterestService.UpdateInterest(id, model);
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
