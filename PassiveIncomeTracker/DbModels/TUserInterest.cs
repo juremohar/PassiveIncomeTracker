@@ -17,10 +17,10 @@ namespace PassiveIncomeTracker.DbModels
         public int IdCryptocurrency { get; set; }
 
         [Column("original_amount")]
-        public double Amount { get; set; }
+        public double OriginalAmount { get; set; }
 
         [Column("compounded_amount")]
-        public double? CompoundedAmount { get; set; }
+        public double CompoundedAmount { get; set; }
 
         [Column("interest")]
         public double Interest { get; set; }
@@ -31,6 +31,12 @@ namespace PassiveIncomeTracker.DbModels
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [Column("inserted_at")]
         public DateTime InsertedAt { get; set; }
+
+        [Column("updated_at")]
+        public DateTime? UpdatedAt { get; set; }
+
+        [Column("deleted_at")]
+        public DateTime? DeletedAt { get; set; }
 
         [ForeignKey("IdUser")]
         public TUser User { get; set; }

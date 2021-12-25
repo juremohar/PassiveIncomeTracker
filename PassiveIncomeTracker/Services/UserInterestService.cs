@@ -1,4 +1,5 @@
-﻿using PassiveIncomeTracker.DbModels;
+﻿using Microsoft.EntityFrameworkCore;
+using PassiveIncomeTracker.DbModels;
 using PassiveIncomeTracker.Interfaces;
 using PassiveIncomeTracker.Models;
 
@@ -51,7 +52,8 @@ namespace PassiveIncomeTracker.Services
             {
                 IdCryptocurrency = cryptocurrency.IdCryptocurrency,
                 IdUser = _authService.GetLoggedInUser().IdUser,
-                Amount = model.Amount,
+                OriginalAmount = model.Amount,
+                CompoundedAmount = model.Amount,
                 Interest = model.Interest,
                 Note = model.Note
             };
@@ -78,7 +80,7 @@ namespace PassiveIncomeTracker.Services
                 throw new Exception("Invalid interest");
             }
 
-            userInterest.Amount = model.Amount;
+            userInterest.OriginalAmount = model.Amount;
             userInterest.Interest = model.Interest;
             userInterest.Note = model.Note;
 
@@ -88,6 +90,30 @@ namespace PassiveIncomeTracker.Services
         public void DeleteInterest(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public void CalculateUsersInterests()
+        {
+            var activeInterests = _db
+                .UsersInterests
+                .Include(x => x.Cryptocurrency)
+                .Where(x => !x.DeletedAt.HasValue);
+
+            var cryptosUsed = activeInterests
+                .Select(x => x.IdCryptocurrency)
+                .Distinct()
+                .ToList();
+
+            foreach (var idCrypto in cryptosUsed)
+            {
+                var thisCryptoInterest = activeInterests.Where(x => x.IdCryptocurrency == idCrypto).ToList();
+
+                var realizedInterests = new List<TUserRealizedInterest>();
+
+                // call interest calculator helper
+
+
+            }
         }
     }
 }

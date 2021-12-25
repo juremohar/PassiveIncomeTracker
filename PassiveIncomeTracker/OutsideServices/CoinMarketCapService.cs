@@ -25,7 +25,7 @@ namespace PassiveIncomeTracker.OutsideServices
         public async Task<List<CmcTokenModel>> GetLatest()
         {
             var request = new RestRequest("cryptocurrency/listings/latest", DataFormat.Json)
-                 .AddParameter("limit", 10);
+                 .AddParameter("limit", 300);
 
             var data = await _client.GetAsync<CmcLatestListingsResponseModel>(request, CancellationToken.None);
 
