@@ -16,11 +16,12 @@
             };
 
             double compoundedAmount = amount * Math.Pow((1 + yearlyRate / 100 / n), n);
+            double interest = (compoundedAmount - amount) / n;
 
             return new CalculatedInterest
             {
-                CompoundedAmount = compoundedAmount,
-                Interest = compoundedAmount - amount
+                CompoundedAmount = amount + interest,
+                GainedInterest = (compoundedAmount - amount) / n
             };
         }
     }
@@ -28,7 +29,7 @@
     public class CalculatedInterest 
     {
         public double CompoundedAmount { get; set; }
-        public double Interest { get; set; }
+        public double GainedInterest { get; set; }
     }
 
     public class CalculationInterval

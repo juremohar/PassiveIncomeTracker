@@ -30,5 +30,12 @@ namespace PassiveIncomeTracker.Controllers
         {
             _userInterestService.UpdateInterest(id, model);
         }
+
+
+        [HttpGet]
+        public async Task CalculateUserInterestsAsync()
+        {
+            await _userInterestService.CalculateUsersInterests();
+        }
     }
 }

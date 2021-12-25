@@ -29,7 +29,7 @@ namespace PassiveIncomeTracker.DbModels
         public double Interest { get; set; }
 
         [Column("note")]
-        public string Note { get; set; }
+        public string? Note { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [Column("inserted_at")]

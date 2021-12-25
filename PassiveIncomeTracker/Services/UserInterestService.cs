@@ -2,6 +2,7 @@
 using PassiveIncomeTracker.DbModels;
 using PassiveIncomeTracker.Interfaces;
 using PassiveIncomeTracker.Models;
+using PassiveIncomeTracker.Helpers;
 
 namespace PassiveIncomeTracker.Services
 {
@@ -99,27 +100,47 @@ namespace PassiveIncomeTracker.Services
             throw new NotImplementedException();
         }
 
-        public void CalculateUsersInterests()
+        public async Task CalculateUsersInterests()
         {
             var activeInterests = _db
                 .UsersInterests
+                .Include(x => x.InterestPayout)
                 .Include(x => x.Cryptocurrency)
                 .Where(x => !x.DeletedAt.HasValue);
 
-            var cryptosUsed = activeInterests
+            var cryptosUsed = await activeInterests
                 .Select(x => x.IdCryptocurrency)
                 .Distinct()
-                .ToList();
+                .ToListAsync();
 
             foreach (var idCrypto in cryptosUsed)
             {
-                var thisCryptoInterest = activeInterests.Where(x => x.IdCryptocurrency == idCrypto).ToList();
+                var thisCryptoInterest = await activeInterests.Where(x => x.IdCryptocurrency == idCrypto).ToListAsync();
 
                 var realizedInterests = new List<TUserRealizedInterest>();
 
-                // call interest calculator helper
+                foreach (var userInterest in thisCryptoInterest) 
+                {
+                    var calculated = InterestCalculator.CalculateCompoundingInterest(userInterest.CompoundedAmount, userInterest.Interest, userInterest.InterestPayout.Code);
 
+                    userInterest.CompoundedAmount = calculated.CompoundedAmount;
 
+                    realizedInterests.Add(new TUserRealizedInterest 
+                    {
+                        IdUser = userInterest.IdUser,
+                        IdUserInterest = userInterest.IdUserInterest,
+                        TotalAmount = userInterest.CompoundedAmount,
+                        GainedAmount = calculated.GainedInterest,
+                        Interest = userInterest.Interest,
+                        Date = DateTime.UtcNow.Date,
+                        InsertedAt = DateTime.UtcNow
+                    });
+                }
+
+                await _db.UsersRealizedInterests.AddRangeAsync(realizedInterests);
+                await _db.SaveChangesAsync();
+
+                realizedInterests.Clear();
             }
         }
     }

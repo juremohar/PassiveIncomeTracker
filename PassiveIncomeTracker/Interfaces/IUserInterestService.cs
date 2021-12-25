@@ -10,6 +10,6 @@ namespace PassiveIncomeTracker.Interfaces
         void DeleteInterest(int id);
         List<InterestModel> GetInterests(GetInterestFilterModel model); // TODO: this needs to be more generic  
         InterestModel GetInterestById(int id);
-        void CalculateUsersInterests();
+        Task CalculateUsersInterests();
     }
 }
