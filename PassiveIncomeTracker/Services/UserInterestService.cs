@@ -38,6 +38,12 @@ namespace PassiveIncomeTracker.Services
                 throw new Exception("Invalid crypocurrency param");
             }
 
+            var interestPayout = _db.InterestPayouts.FirstOrDefault(x => x.IdInterestPayout == model.IdInterestPayout);
+            if (interestPayout == null) 
+            {
+                throw new Exception("Invalid interest payout param");
+            }
+
             if (model.Amount <= 0) 
             {
                 throw new Exception("Invalid amount");
@@ -52,6 +58,7 @@ namespace PassiveIncomeTracker.Services
             {
                 IdCryptocurrency = cryptocurrency.IdCryptocurrency,
                 IdUser = _authService.GetLoggedInUser().IdUser,
+                IdInterestPayout = model.IdInterestPayout,
                 OriginalAmount = model.Amount,
                 CompoundedAmount = model.Amount,
                 Interest = model.Interest,

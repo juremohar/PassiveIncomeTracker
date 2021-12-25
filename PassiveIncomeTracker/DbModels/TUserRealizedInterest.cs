@@ -13,8 +13,8 @@ namespace PassiveIncomeTracker.DbModels
         [Column("id_user")]
         public int IdUser { get; set; }
 
-        [Column("id_cryptocurrency")]
-        public int IdCryptocurrency { get; set; }
+        [Column("id_user_interest")]
+        public int IdUserInterest { get; set; }
 
         [Column("total_amount")]
         public double TotalAmount { get; set; }
@@ -35,7 +35,7 @@ namespace PassiveIncomeTracker.DbModels
         [ForeignKey("IdUser")]
         public TUser User { get; set; }
 
-        [ForeignKey("IdCryptoCurrency")]
-        public TCryptocurrency Cryptocurrency { get; set; }
+        [ForeignKey("IdUserInterest")]
+        public TUserInterest UserInterest { get; set; }
     }
 }

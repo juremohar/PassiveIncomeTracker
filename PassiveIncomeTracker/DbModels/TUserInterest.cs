@@ -16,6 +16,9 @@ namespace PassiveIncomeTracker.DbModels
         [Column("id_cryptocurrency")]
         public int IdCryptocurrency { get; set; }
 
+        [Column("id_interest_payout")]
+        public int IdInterestPayout { get; set; }
+
         [Column("original_amount")]
         public double OriginalAmount { get; set; }
 
@@ -43,5 +46,8 @@ namespace PassiveIncomeTracker.DbModels
 
         [ForeignKey("IdCryptocurrency")]
         public TCryptocurrency Cryptocurrency { get; set; }
+
+        [ForeignKey("IdInterestPayout")]
+        public TCodeInterestPayout InterestPayout { get; set; }
     }
 }

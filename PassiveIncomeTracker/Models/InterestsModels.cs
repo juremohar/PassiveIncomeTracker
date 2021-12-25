@@ -3,6 +3,7 @@
     public class InsertInterestModel 
     {
         public int IdCryptoCurrency { get; set; }
+        public int IdInterestPayout { get; set; }
         public double Amount { get; set; }
         public double Interest { get; set; }
         public string? Note { get; set; } 

@@ -2,19 +2,18 @@
 {
     public class InterestCalculator
     {
-        public static CalculatedInterest CalculateCompoundingInterest(double amount, double yearlyRate, CalculationInterval interval) 
+        public static CalculatedInterest CalculateCompoundingInterest(double amount, double yearlyRate, string intervalPayoutCode) 
         {
             // https://www.thecalculatorsite.com/articles/finance/compound-interest-formula.php
 
-            int n;
-            switch (interval)
+            var n = intervalPayoutCode switch
             {
-                case CalculationInterval.Daily: n = DateTime.IsLeapYear(DateTime.UtcNow.Year) ? 366 : 365; break;
-                case CalculationInterval.Weekly: n = 52; break;
-                case CalculationInterval.Monthly: n = 12; break;
-                case CalculationInterval.Yearly: n = 1; break;
-                default: throw new Exception("Wrong calculation interval");
-            }
+                CalculationInterval.Daily => DateTime.IsLeapYear(DateTime.UtcNow.Year) ? 366 : 365,
+                CalculationInterval.Weekly => 52,
+                CalculationInterval.Monthly => 12,
+                CalculationInterval.Yearly => 1,
+                _ => throw new Exception("Wrong calculation interval"),
+            };
 
             double compoundedAmount = amount * Math.Pow((1 + yearlyRate / 100 / n), n);
 
@@ -32,11 +31,11 @@
         public double Interest { get; set; }
     }
 
-    public enum CalculationInterval : int
+    public class CalculationInterval
     {
-        Daily,
-        Weekly,
-        Monthly,
-        Yearly
+        public const string Daily = "daily";
+        public const string Weekly = "weekly";
+        public const string Monthly = "monthly";
+        public const string Yearly = "yearly";
     }
 }
