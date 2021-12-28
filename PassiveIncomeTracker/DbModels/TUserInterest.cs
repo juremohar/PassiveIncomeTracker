@@ -25,8 +25,8 @@ namespace PassiveIncomeTracker.DbModels
         [Column("compounded_amount")]
         public double CompoundedAmount { get; set; }
 
-        [Column("interest")]
-        public double Interest { get; set; }
+        [Column("interest_rate")]
+        public double InterestRate { get; set; }
 
         [Column("note")]
         public string? Note { get; set; }

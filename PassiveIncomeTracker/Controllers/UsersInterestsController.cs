@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PassiveIncomeTracker.ApiModels;
 using PassiveIncomeTracker.Interfaces;
 using PassiveIncomeTracker.Models;
 
@@ -20,25 +19,25 @@ namespace PassiveIncomeTracker.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] InsertInterestModel model)
+        public async Task Post([FromBody] InsertUserInterestModel model)
         {
-            _userInterestService.InsertInterest(model);
+            await _userInterestService.InsertUserInterest(model);
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] UpdateInterestModel model)
+        public async Task Put(int id, [FromBody] UpdateUserInterestModel model)
         {
-            _userInterestService.UpdateInterest(id, model);
+            await _userInterestService.UpdateUserInterest(id, model);
         }
 
-        [HttpPost("GetUserCryptoBalance")]
+        [HttpPost("UserCryptoBalance")]
         public async Task<List<UserCrypoBalanceModel>> GetUserCryptoBalance([FromBody] GetUserCryptoBalanceFilterModel model) 
         {
             return await _userInterestService.GetUserCryptoBalance(model);
         }
 
 
-        [HttpGet]
+        [HttpGet("Calculate")]
         public async Task CalculateUserInterestsAsync()
         {
             await _userInterestService.CalculateUsersInterests();

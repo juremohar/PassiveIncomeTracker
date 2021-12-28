@@ -22,8 +22,8 @@ namespace PassiveIncomeTracker.DbModels
         [Column("gained_amount")]
         public double GainedAmount { get; set; }
 
-        [Column("interest")]
-        public double Interest { get; set; }
+        [Column("interest_rate")]
+        public double InterestRate { get; set; }
 
         [Column("date")]
         public DateTime Date { get; set; }

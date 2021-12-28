@@ -21,11 +21,6 @@ namespace PassiveIncomeTracker.Services
             _authService = authService;
         }
 
-        public InterestModel GetInterestById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<UserCrypoBalanceModel>> GetUserCryptoBalance(GetUserCryptoBalanceFilterModel model)
         {
             var user = await _db
@@ -61,20 +56,20 @@ namespace PassiveIncomeTracker.Services
                     Name = x.Select(y => y.Cryptocurrency.Name).First(),
                     Price = x.Select(y => y.Cryptocurrency.Price).First(),
                     CompoundedAmount = x.Sum(y => y.CompoundedAmount),
-                    AverageInterest = x.Average(y => y.Interest) // this is only POC, we need to take in considoration that not all interest is equal...
+                    AverageInterestRate = x.Average(y => y.InterestRate) // this is only POC, we need to take in considoration that not all interest is equal...
                 })
                 .ToListAsync();
         }
 
-        public void InsertInterest(InsertInterestModel model)
+        public async Task InsertUserInterest(InsertUserInterestModel model)
         {
-            var cryptocurrency = _db.Cryptocurrencies.FirstOrDefault(x => x.IdCryptocurrency == model.IdCryptoCurrency);
+            var cryptocurrency = await _db.Cryptocurrencies.FirstOrDefaultAsync(x => x.IdCryptocurrency == model.IdCryptoCurrency);
             if (cryptocurrency == null) 
             {
                 throw new Exception("Invalid crypocurrency param");
             }
 
-            var interestPayout = _db.InterestPayouts.FirstOrDefault(x => x.IdInterestPayout == model.IdInterestPayout);
+            var interestPayout = await _db.InterestPayouts.FirstOrDefaultAsync(x => x.IdInterestPayout == model.IdInterestPayout);
             if (interestPayout == null) 
             {
                 throw new Exception("Invalid interest payout param");
@@ -85,7 +80,7 @@ namespace PassiveIncomeTracker.Services
                 throw new Exception("Invalid amount");
             }
 
-            if (model.Interest <= 0) 
+            if (model.InterestRate <= 0) 
             {
                 throw new Exception("Invalid interest");
             }
@@ -97,20 +92,20 @@ namespace PassiveIncomeTracker.Services
                 IdInterestPayout = model.IdInterestPayout,
                 OriginalAmount = model.Amount,
                 CompoundedAmount = model.Amount,
-                Interest = model.Interest,
+                InterestRate = model.InterestRate,
                 Note = model.Note
             };
 
-            _db.UsersInterests.Add(interest);
-            _db.SaveChanges();
+            await _db.UsersInterests.AddAsync(interest);
+            await _db.SaveChangesAsync();
         }
 
-        public void UpdateInterest(int id, UpdateInterestModel model)
+        public async Task UpdateUserInterest(int id, UpdateUserInterestModel model)
         {
-            var userInterest = _db.UsersInterests.FirstOrDefault(x => x.IdUserInterest == id);
+            var userInterest = await _db.UsersInterests.FirstOrDefaultAsync(x => x.IdUserInterest == id);
             if (userInterest == null)
             {
-                throw new Exception("Invalid user interest param");
+                throw new Exception("Invalid idUserInterest param");
             }
 
             if (model.Amount <= 0)
@@ -118,21 +113,16 @@ namespace PassiveIncomeTracker.Services
                 throw new Exception("Invalid amount");
             }
 
-            if (model.Interest <= 0)
+            if (model.InterestRate <= 0)
             {
                 throw new Exception("Invalid interest");
             }
 
             userInterest.OriginalAmount = model.Amount;
-            userInterest.Interest = model.Interest;
+            userInterest.InterestRate = model.InterestRate;
             userInterest.Note = model.Note;
 
-            _db.SaveChanges();
-        }
-
-        public void DeleteInterest(int id)
-        {
-            throw new NotImplementedException();
+            await _db.SaveChangesAsync();
         }
 
         public async Task CalculateUsersInterests()
@@ -156,7 +146,7 @@ namespace PassiveIncomeTracker.Services
 
                 foreach (var userInterest in thisCryptoInterest) 
                 {
-                    var calculated = InterestCalculator.CalculateCompoundingInterest(userInterest.CompoundedAmount, userInterest.Interest, userInterest.InterestPayout.Code);
+                    var calculated = InterestCalculator.CalculateCompoundingInterest(userInterest.CompoundedAmount, userInterest.InterestRate, userInterest.InterestPayout.Code);
 
                     userInterest.CompoundedAmount = calculated.CompoundedAmount;
 
@@ -166,7 +156,7 @@ namespace PassiveIncomeTracker.Services
                         IdUserInterest = userInterest.IdUserInterest,
                         TotalAmount = userInterest.CompoundedAmount,
                         GainedAmount = calculated.GainedInterest,
-                        Interest = userInterest.Interest,
+                        InterestRate = userInterest.InterestRate,
                         Date = DateTime.UtcNow.Date,
                         InsertedAt = DateTime.UtcNow
                     });
