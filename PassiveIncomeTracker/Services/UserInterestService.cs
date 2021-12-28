@@ -26,9 +26,44 @@ namespace PassiveIncomeTracker.Services
             throw new NotImplementedException();
         }
 
-        public List<InterestModel> GetInterests(GetInterestFilterModel model)
+        public async Task<List<UserCrypoBalanceModel>> GetUserCryptoBalance(GetUserCryptoBalanceFilterModel model)
         {
-            throw new NotImplementedException();
+            var user = await _db
+                .Users
+                .FirstOrDefaultAsync(x => x.IdUser == model.IdUser);
+
+            if (user == null) 
+            {
+                throw new Exception("IdUser is not valid.");
+            }
+
+            var userBalance = _db
+                .UsersInterests
+                .Include(x => x.Cryptocurrency)
+                .Where(x => x.IdUser == model.IdUser)
+                .AsQueryable();
+
+            if (model.IdCryptocurrency.HasValue)
+            {
+                var crypocurrency = await _db.Cryptocurrencies.FirstOrDefaultAsync(x => x.IdCryptocurrency == model.IdCryptocurrency);
+                if (crypocurrency == null)
+                    throw new Exception("IdCryptocurrency is not valid.");
+
+                userBalance = userBalance.Where(x => x.IdCryptocurrency == model.IdCryptocurrency);
+            }
+
+            return await userBalance
+                .GroupBy(x => new { x.IdCryptocurrency })
+                .Select(x => new UserCrypoBalanceModel 
+                {
+                    IdCryptocurrency = x.Key.IdCryptocurrency,
+                    Code = x.Select(y => y.Cryptocurrency.Code).First(),
+                    Name = x.Select(y => y.Cryptocurrency.Name).First(),
+                    Price = x.Select(y => y.Cryptocurrency.Price).First(),
+                    CompoundedAmount = x.Sum(y => y.CompoundedAmount),
+                    AverageInterest = x.Average(y => y.Interest) // this is only POC, we need to take in considoration that not all interest is equal...
+                })
+                .ToListAsync();
         }
 
         public void InsertInterest(InsertInterestModel model)

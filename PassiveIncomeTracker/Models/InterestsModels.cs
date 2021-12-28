@@ -27,9 +27,22 @@
         public DateTime InsertedAt { get; set; }
     }
 
-    public class GetInterestFilterModel 
+    public class UserCrypoBalanceModel 
     {
-        public int? IdUser {  get; set; }
+        public int IdCryptocurrency { get; set; }
+        public string Code { get; set; }
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public double CompoundedAmount { get; set; }
+        public double AverageInterest { get; set; }
+    }
+
+    public class GetUserCryptoBalanceFilterModel 
+    {
+        public int IdUser {  get; set; }
         public int? IdCryptocurrency { get; set; }
+        // inserted at
+        // query
+        // time frame
     }
 }

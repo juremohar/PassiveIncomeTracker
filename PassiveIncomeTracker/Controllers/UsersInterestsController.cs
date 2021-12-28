@@ -31,6 +31,12 @@ namespace PassiveIncomeTracker.Controllers
             _userInterestService.UpdateInterest(id, model);
         }
 
+        [HttpPost("GetUserCryptoBalance")]
+        public async Task<List<UserCrypoBalanceModel>> GetUserCryptoBalance([FromBody] GetUserCryptoBalanceFilterModel model) 
+        {
+            return await _userInterestService.GetUserCryptoBalance(model);
+        }
+
 
         [HttpGet]
         public async Task CalculateUserInterestsAsync()
