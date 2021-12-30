@@ -24,6 +24,20 @@
                 GainedInterest = (compoundedAmount - amount) / n
             };
         }
+
+        public static double CalculateAverageInterestRate(List<(double Amount, double YearlyRate)> amountYearlyRates) 
+        {
+            double combinedInterests = 0;
+
+            double totalAmount = amountYearlyRates.Sum(x => x.Amount);
+
+            foreach (var pair in amountYearlyRates) 
+            {
+                combinedInterests += pair.Amount * pair.YearlyRate;
+            }
+
+            return combinedInterests / totalAmount;
+        }
     }
 
     public class CalculatedInterest 

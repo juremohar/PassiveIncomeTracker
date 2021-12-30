@@ -47,7 +47,7 @@ namespace PassiveIncomeTracker.Services
                     Name = x.Select(y => y.Cryptocurrency.Name).First(),
                     Price = x.Select(y => y.Cryptocurrency.Price).First(),
                     CompoundedAmount = x.Sum(y => y.CompoundedAmount),
-                    AverageInterestRate = x.Average(y => y.InterestRate) // this is only POC, we need to take in considoration that not all interest is equal...
+                    AverageInterestRate = InterestCalculator.CalculateAverageInterestRate(x.Select(y => new Tuple<double, double>(y.CompoundedAmount, y.InterestRate).ToValueTuple()).ToList())
                 })
                 .ToListAsync();
 
@@ -63,7 +63,6 @@ namespace PassiveIncomeTracker.Services
                     var calculatedCryptoIntervalInterest = InterestCalculator.CalculateCompoundingInterest(cryptoInterest.CompoundedAmount, cryptoInterest.AverageInterestRate, interestInterval);
                     summedPossibleInterest += calculatedCryptoIntervalInterest.GainedInterest * cryptoInterest.Price;
                 }
-
 
                 switch (interestInterval) 
                 {
