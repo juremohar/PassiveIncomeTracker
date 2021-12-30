@@ -16,7 +16,7 @@
         public string? Note { get; set; }
     }
 
-    public class UserCrypoBalanceModel 
+    public class UserCrypoInterestInformationModel 
     {
         public int IdCryptocurrency { get; set; }
         public string Code { get; set; }
@@ -26,12 +26,17 @@
         public double AverageInterestRate { get; set; }
     }
 
-    public class GetUserCryptoBalanceFilterModel 
+    public class UserCryptosInterestsInformationModel 
     {
-        public int IdUser {  get; set; }
-        public int? IdCryptocurrency { get; set; }
-        // inserted at
-        // query
-        // time frame
+        public List<UserCrypoInterestInformationModel> CryptosInterests { get; set; }
+        public DifferentIntervalsInterestsEarningsModel DifferentIntervalsInterestsEarnings { get; set; }
+    }
+
+    public class DifferentIntervalsInterestsEarningsModel 
+    {
+        public double Daily { get; set; }
+        public double Weekly { get; set; }
+        public double Monthly { get; set; }
+        public double Yearly { get; set; }
     }
 }

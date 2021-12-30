@@ -21,35 +21,26 @@ namespace PassiveIncomeTracker.Services
             _authService = authService;
         }
 
-        public async Task<List<UserCrypoBalanceModel>> GetUserCryptoBalance(GetUserCryptoBalanceFilterModel model)
+        public async Task<UserCryptosInterestsInformationModel> GetUserCryptosInterestsInformation(int idUser)
         {
             var user = await _db
                 .Users
-                .FirstOrDefaultAsync(x => x.IdUser == model.IdUser);
+                .FirstOrDefaultAsync(x => x.IdUser == idUser);
 
             if (user == null) 
             {
                 throw new Exception("IdUser is not valid.");
             }
 
-            var userBalance = _db
+            var userCryptosInterests = _db
                 .UsersInterests
                 .Include(x => x.Cryptocurrency)
-                .Where(x => x.IdUser == model.IdUser)
+                .Where(x => x.IdUser == idUser)
                 .AsQueryable();
 
-            if (model.IdCryptocurrency.HasValue)
-            {
-                var crypocurrency = await _db.Cryptocurrencies.FirstOrDefaultAsync(x => x.IdCryptocurrency == model.IdCryptocurrency);
-                if (crypocurrency == null)
-                    throw new Exception("IdCryptocurrency is not valid.");
-
-                userBalance = userBalance.Where(x => x.IdCryptocurrency == model.IdCryptocurrency);
-            }
-
-            return await userBalance
+            var groupedCryptosInterests = await userCryptosInterests
                 .GroupBy(x => new { x.IdCryptocurrency })
-                .Select(x => new UserCrypoBalanceModel 
+                .Select(x => new UserCrypoInterestInformationModel
                 {
                     IdCryptocurrency = x.Key.IdCryptocurrency,
                     Code = x.Select(y => y.Cryptocurrency.Code).First(),
@@ -59,6 +50,36 @@ namespace PassiveIncomeTracker.Services
                     AverageInterestRate = x.Average(y => y.InterestRate) // this is only POC, we need to take in considoration that not all interest is equal...
                 })
                 .ToListAsync();
+
+            var intervalsEarnings = new DifferentIntervalsInterestsEarningsModel();
+
+            List<string> intervalsToCalculate = new() { CalculationInterval.Daily, CalculationInterval.Weekly, CalculationInterval.Monthly, CalculationInterval.Yearly };
+
+            foreach (var interestInterval in intervalsToCalculate) 
+            {
+                double summedPossibleInterest = 0;
+                foreach (var cryptoInterest in groupedCryptosInterests)
+                {
+                    var calculatedCryptoIntervalInterest = InterestCalculator.CalculateCompoundingInterest(cryptoInterest.CompoundedAmount, cryptoInterest.AverageInterestRate, interestInterval);
+                    summedPossibleInterest += calculatedCryptoIntervalInterest.GainedInterest * cryptoInterest.Price;
+                }
+
+
+                switch (interestInterval) 
+                {
+                    case CalculationInterval.Daily: intervalsEarnings.Daily = summedPossibleInterest; break;
+                    case CalculationInterval.Weekly: intervalsEarnings.Weekly = summedPossibleInterest; break;
+                    case CalculationInterval.Monthly: intervalsEarnings.Monthly = summedPossibleInterest; break;
+                    case CalculationInterval.Yearly: intervalsEarnings.Yearly = summedPossibleInterest; break;
+                    default: throw new Exception("Interval you are trying to calculate is not available");
+                }
+            }
+
+            return new UserCryptosInterestsInformationModel
+            {
+                CryptosInterests = groupedCryptosInterests,
+                DifferentIntervalsInterestsEarnings = intervalsEarnings
+            };
         }
 
         public async Task InsertUserInterest(InsertUserInterestModel model)

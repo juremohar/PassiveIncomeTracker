@@ -7,7 +7,7 @@ namespace PassiveIncomeTracker.Interfaces
     {
         Task InsertUserInterest(InsertUserInterestModel model);
         Task UpdateUserInterest(int id, UpdateUserInterestModel model);
-        Task<List<UserCrypoBalanceModel>> GetUserCryptoBalance(GetUserCryptoBalanceFilterModel model); // TODO: this needs to be more generic  
+        Task<UserCryptosInterestsInformationModel> GetUserCryptosInterestsInformation(int idUser);
         Task CalculateUsersInterests();
     }
 }
