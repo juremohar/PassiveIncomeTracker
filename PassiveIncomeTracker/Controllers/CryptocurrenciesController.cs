@@ -2,6 +2,7 @@
 using PassiveIncomeTracker.ApiModels;
 using PassiveIncomeTracker.DbModels;
 using PassiveIncomeTracker.Interfaces;
+using PassiveIncomeTracker.Models;
 
 namespace PassiveIncomeTracker.Controllers
 {
@@ -29,6 +30,12 @@ namespace PassiveIncomeTracker.Controllers
         public void Post([FromBody] InsertCryptocurrencyModel model)
         {
             _cryptocurrenciesService.Insert(model);
+        }
+
+        [HttpGet]
+        public List<CryptocurrencyModel> Get([FromQuery] GetCryptocurrenciesFilterModel model)
+        {
+            return _cryptocurrenciesService.Get(model);
         }
     }
 }

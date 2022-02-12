@@ -1,5 +1,5 @@
 ﻿using PassiveIncomeTracker.ApiModels;
-using PassiveIncomeTracker.DbModels;
+using PassiveIncomeTracker.Models;
 
 namespace PassiveIncomeTracker.Interfaces
 {
@@ -7,5 +7,6 @@ namespace PassiveIncomeTracker.Interfaces
     {
         void Insert(InsertCryptocurrencyModel model);
         Task UpdateCryptoWithLatestData();
+        List<CryptocurrencyModel> Get(GetCryptocurrenciesFilterModel model);
     }
 }

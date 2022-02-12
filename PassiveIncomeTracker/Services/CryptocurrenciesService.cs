@@ -1,6 +1,7 @@
 ﻿using PassiveIncomeTracker.ApiModels;
 using PassiveIncomeTracker.DbModels;
 using PassiveIncomeTracker.Interfaces;
+using PassiveIncomeTracker.Models;
 using PassiveIncomeTracker.OutsideServices;
 
 namespace PassiveIncomeTracker.Services
@@ -19,6 +20,38 @@ namespace PassiveIncomeTracker.Services
         {
             _db = db;
             _coinMarketCapService = coinMarketCapService;
+        }
+
+        public List<CryptocurrencyModel> Get(GetCryptocurrenciesFilterModel model)
+        {
+            var cryptocurrencies = _db.Cryptocurrencies.AsEnumerable();
+
+            if (model.Query != null) 
+            {
+                cryptocurrencies = cryptocurrencies
+                    .Where(x => 
+                        x.Name.Contains(model.Query) ||
+                        x.Code.Contains(model.Query)
+                    );
+            }
+
+            // TODO: we dont have marketcap atm so we order by idCrypto, but implement marketcap
+            cryptocurrencies = cryptocurrencies
+                .OrderBy(x => x.IdCryptocurrency)
+                .Skip((model.Page - 1) * model.PerPage)
+                .Take(model.PerPage);
+
+            var result = cryptocurrencies.Select(x => new CryptocurrencyModel
+            {
+                IdCryptocurrency = x.IdCryptocurrency,
+                Code = x.Code,
+                Name = x.Name,
+                Price = x.Price,
+                CoinMarketCapId = x.CoinMarketCapId
+            })
+            .ToList();
+
+            return result;
         }
 
         public void Insert(InsertCryptocurrencyModel model)
