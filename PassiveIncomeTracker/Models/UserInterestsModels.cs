@@ -19,11 +19,21 @@
     public class UserCrypoInterestInformationModel 
     {
         public int IdCryptocurrency { get; set; }
+        public int CoinMarketCapId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public double Price { get; set; }
         public double CompoundedAmount { get; set; }
         public double AverageInterestRate { get; set; }
+        public DifferentIntervalsInterestModel DifferrentIntervalsInterest { get; set; }
+    }
+
+    public class DifferentIntervalsInterestModel 
+    {
+        public double Daily { get; set; }
+        public double Weekly { get; set; }
+        public double Monthly { get; set; }
+        public double Yearly { get; set; }
     }
 
     public class UserCryptosInterestsInformationModel 

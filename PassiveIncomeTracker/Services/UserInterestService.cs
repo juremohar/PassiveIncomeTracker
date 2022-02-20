@@ -43,11 +43,13 @@ namespace PassiveIncomeTracker.Services
                 .Select(x => new UserCrypoInterestInformationModel
                 {
                     IdCryptocurrency = x.Key.IdCryptocurrency,
+                    CoinMarketCapId = x.Select(y => y.Cryptocurrency.CoinMarketCapId).First(),
                     Code = x.Select(y => y.Cryptocurrency.Code).First(),
                     Name = x.Select(y => y.Cryptocurrency.Name).First(),
                     Price = x.Select(y => y.Cryptocurrency.Price).First(),
                     CompoundedAmount = x.Sum(y => y.CompoundedAmount),
-                    AverageInterestRate = InterestCalculator.CalculateAverageInterestRate(x.Select(y => new Tuple<double, double>(y.CompoundedAmount, y.InterestRate).ToValueTuple()).ToList())
+                    AverageInterestRate = InterestCalculator.CalculateAverageInterestRate(x.Select(y => new Tuple<double, double>(y.CompoundedAmount, y.InterestRate).ToValueTuple()).ToList()),
+                    DifferrentIntervalsInterest = new DifferentIntervalsInterestModel { }
                 })
                 .ToListAsync();
 
@@ -61,7 +63,19 @@ namespace PassiveIncomeTracker.Services
                 foreach (var cryptoInterest in groupedCryptosInterests)
                 {
                     var calculatedCryptoIntervalInterest = InterestCalculator.CalculateCompoundingInterest(cryptoInterest.CompoundedAmount, cryptoInterest.AverageInterestRate, interestInterval);
-                    summedPossibleInterest += calculatedCryptoIntervalInterest.GainedInterest * cryptoInterest.Price;
+
+                    var possibleInterest = calculatedCryptoIntervalInterest.GainedInterest * cryptoInterest.Price;
+
+                    switch (interestInterval)
+                    {
+                        case CalculationInterval.Daily: cryptoInterest.DifferrentIntervalsInterest.Daily = possibleInterest; break;
+                        case CalculationInterval.Weekly: cryptoInterest.DifferrentIntervalsInterest.Weekly = possibleInterest; break;
+                        case CalculationInterval.Monthly: cryptoInterest.DifferrentIntervalsInterest.Monthly = possibleInterest; break;
+                        case CalculationInterval.Yearly: cryptoInterest.DifferrentIntervalsInterest.Yearly = possibleInterest; break;
+                        default: throw new Exception("Interval you are trying to calculate is not available");
+                    }
+
+                    summedPossibleInterest += possibleInterest;
                 }
 
                 switch (interestInterval) 
