@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PassiveIncomeTracker.ApiModels;
 using PassiveIncomeTracker.Interfaces;
+using PassiveIncomeTracker.Models;
 
 namespace PassiveIncomeTracker.Controllers
 {

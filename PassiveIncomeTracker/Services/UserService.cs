@@ -26,20 +26,20 @@ namespace PassiveIncomeTracker.Services
             // TODO: add email validation, minimal password strength ...
 
             if (string.IsNullOrEmpty(model.Email))
-                throw new ArgumentNullException(nameof(model.Email));
+                throw new UserException("Missing param - email");
 
             if (string.IsNullOrEmpty(model.Password))
-                throw new ArgumentNullException(nameof(model.Password));
+                throw new UserException("Missing param - password");
 
             if (string.IsNullOrEmpty(model.PasswordRepeat))
-                throw new ArgumentNullException(nameof(model.PasswordRepeat));
+                throw new UserException("Missing param - password repeat");
 
             var user = _db.Users.SingleOrDefault(x => x.Email == model.Email);
             if (user != null)
-                throw new Exception("User with this email already exists");
+                throw new UserException("User with this email already exists");
 
             if (model.Password != model.PasswordRepeat)
-                throw new Exception("Passwords do not match!");
+                throw new UserException("Passwords do not match!");
 
             string salt = SecurityHelper.GenerateSalt(70);
 
@@ -59,20 +59,20 @@ namespace PassiveIncomeTracker.Services
         public string Login(UserLoginModel model)
         {
             if (string.IsNullOrEmpty(model.Email))
-                throw new Exception("Missing param - email");
+                throw new UserException("Missing param - email");
 
             if (string.IsNullOrEmpty(model.Password))
-                throw new Exception("Missing param - password");
+                throw new UserException("Missing param - password");
 
             var user = _db.Users.SingleOrDefault(x => x.Email == model.Email);
 
             if (user == null)
-                throw new Exception("User with this email doesn't exist");
+                throw new UserException("User with this email doesn't exist");
 
             string password = SecurityHelper.HashPassword(model.Password, user.Salt, 10101, 70);
 
             if (user.Password != password)
-                throw new Exception("Password is not correct");
+                throw new UserException("Password is not correct");
 
             var loggedIn = new LoggedInUserModel
             {

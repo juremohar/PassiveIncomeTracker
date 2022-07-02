@@ -100,23 +100,23 @@ namespace PassiveIncomeTracker.Services
             var cryptocurrency = await _db.Cryptocurrencies.FirstOrDefaultAsync(x => x.IdCryptocurrency == model.IdCryptoCurrency);
             if (cryptocurrency == null) 
             {
-                throw new Exception("Invalid crypocurrency param");
+                throw new UserException("Invalid crypocurrency param");
             }
 
             var interestPayout = await _db.InterestPayouts.FirstOrDefaultAsync(x => x.IdInterestPayout == model.IdInterestPayout);
             if (interestPayout == null) 
             {
-                throw new Exception("Invalid interest payout param");
+                throw new UserException("Invalid interest payout param");
             }
 
             if (model.Amount <= 0) 
             {
-                throw new Exception("Invalid amount");
+                throw new UserException("Invalid amount");
             }
 
             if (model.InterestRate <= 0) 
             {
-                throw new Exception("Invalid interest");
+                throw new UserException("Invalid interest");
             }
 
             var interest = new TUserInterest
@@ -139,17 +139,17 @@ namespace PassiveIncomeTracker.Services
             var userInterest = await _db.UsersInterests.FirstOrDefaultAsync(x => x.IdUserInterest == id);
             if (userInterest == null)
             {
-                throw new Exception("Invalid idUserInterest param");
+                throw new UserException("Invalid idUserInterest param");
             }
 
             if (model.Amount <= 0)
             {
-                throw new Exception("Invalid amount");
+                throw new UserException("Invalid amount");
             }
-
+            
             if (model.InterestRate <= 0)
             {
-                throw new Exception("Invalid interest");
+                throw new UserException("Invalid interest");
             }
 
             userInterest.OriginalAmount = model.Amount;
