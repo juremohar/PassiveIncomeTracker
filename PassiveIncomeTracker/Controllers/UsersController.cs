@@ -30,5 +30,11 @@ namespace PassiveIncomeTracker.Controllers
         {
             return _userService.Register(model);
         }
+
+        [HttpPatch("logout")]
+        public void Logout(string token)
+        {
+            _userService.Logout(token);
+        }
     }
 }

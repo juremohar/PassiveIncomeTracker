@@ -6,5 +6,6 @@ namespace PassiveIncomeTracker.Interfaces
     {
         string Login(UserLoginModel model);
         bool Register(UserRegisterModel model);
+        void Logout(string token);
     }
 }

@@ -91,5 +91,23 @@ namespace PassiveIncomeTracker.Services
 
             return row.Token;
         }
+
+        public void Logout(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+                throw new UserException("Missing param - token");
+
+            var session = _db.Sessions.SingleOrDefault(x => x.Token == token);
+
+            if (session == null)
+                throw new UserException("Session doesn't exist!");
+
+            if (session.RevokedAt <= DateTime.UtcNow)
+                throw new UserException("Session is already revoked!");
+
+            session.RevokedAt = DateTime.UtcNow;
+
+            _db.SaveChanges();
+        }
     }
 }
