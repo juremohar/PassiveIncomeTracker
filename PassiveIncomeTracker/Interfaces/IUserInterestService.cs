@@ -1,5 +1,4 @@
-﻿using PassiveIncomeTracker.ApiModels;
-using PassiveIncomeTracker.Models;
+﻿using PassiveIncomeTracker.Models;
 
 namespace PassiveIncomeTracker.Interfaces
 {
@@ -9,5 +8,6 @@ namespace PassiveIncomeTracker.Interfaces
         Task UpdateUserInterest(int id, UpdateUserInterestModel model);
         Task<UserCryptosInterestsInformationModel> GetUserCryptosInterestsInformation(int idUser);
         Task CalculateUsersInterests();
+        Task<List<UserCryptoInputsModel>> GetUserCryptocurrencyInputs(int idUser, int idCryptocurrency);
     }
 }

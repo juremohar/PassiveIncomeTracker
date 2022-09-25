@@ -49,4 +49,14 @@
         public double Monthly { get; set; }
         public double Yearly { get; set; }
     }
+
+    public class UserCryptoInputsModel 
+    {
+        public int IdUserInterest { get; set; }
+        public int IdCryptocurrency { get; set; }
+        public InterestPayoutModel InterestPayout { get; set; }
+        public double Amount { get; set; }
+        public double Rate { get; set; }
+        public DateTime InsertedAt { get; set; } 
+    }
 }

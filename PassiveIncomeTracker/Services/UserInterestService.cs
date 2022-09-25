@@ -202,5 +202,50 @@ namespace PassiveIncomeTracker.Services
                 realizedInterests.Clear();
             }
         }
+
+        public async Task<List<UserCryptoInputsModel>> GetUserCryptocurrencyInputs(int idUser, int idCryptocurrency) 
+        {
+            var user = _db.Users.SingleOrDefault(x => x.IdUser == idUser);
+
+            if (user == null)
+            {
+                throw new UserException("Invalid user param");
+            }
+
+            var cryptocurrency = _db.Cryptocurrencies.SingleOrDefault(x => x.IdCryptocurrency == idCryptocurrency);
+
+            if (cryptocurrency == null)
+            {
+                throw new UserException("Invalid cryptocurrency param");
+            }
+
+            var cryptoInputs = _db
+              .UsersInterests
+              .Include(x => x.InterestPayout)
+              .Include(x => x.Cryptocurrency)
+              .Where(x => 
+                !x.DeletedAt.HasValue &&
+                x.IdCryptocurrency == idCryptocurrency &&
+                x.IdUser == idUser
+              );
+
+            return  await cryptoInputs
+              .Select(x => new UserCryptoInputsModel 
+              {
+                IdUserInterest = x.IdUserInterest,
+                IdCryptocurrency = x.IdCryptocurrency,
+                InterestPayout = new InterestPayoutModel 
+                {
+                    IdInterestPayout = x.IdInterestPayout,
+                    Code = x.InterestPayout.Code,
+                    Title = x.InterestPayout.Title
+                },
+                Amount = x.OriginalAmount,
+                Rate = x.InterestRate,
+                InsertedAt = x.InsertedAt
+              })
+              .ToListAsync();
+
+        }
     }
 }

@@ -41,5 +41,11 @@ namespace PassiveIncomeTracker.Controllers
         {
             await _userInterestService.CalculateUsersInterests();
         }
+
+        [HttpGet("CryptoBalance/{idUser}/{idCryptocurrency}")]
+        public async Task<List<UserCryptoInputsModel>> GetUserCryptoBalance(int idUser, int idCryptocurrency)
+        {
+            return await _userInterestService.GetUserCryptocurrencyInputs(idUser, idCryptocurrency);
+        }
     }
 }
