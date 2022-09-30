@@ -8,5 +8,6 @@ namespace PassiveIncomeTracker.Interfaces
         void Insert(InsertCryptocurrencyModel model);
         Task UpdateCryptoWithLatestData();
         List<CryptocurrencyModel> Get(GetCryptocurrenciesFilterModel model);
+        CryptocurrencyModel GetById(int idCryptocurrency);
     }
 }

@@ -109,5 +109,26 @@ namespace PassiveIncomeTracker.Services
 
             await _db.SaveChangesAsync();
         }
+
+        public CryptocurrencyModel GetById(int idCryptocurrency)
+        {
+            var cryptocurrency = _db
+                .Cryptocurrencies
+                .SingleOrDefault(x => x.IdCryptocurrency == idCryptocurrency);
+
+            if (cryptocurrency == null)
+            {
+                throw new UserException("Invalid idCryptocurrency param");
+            }
+
+            return new CryptocurrencyModel
+            {
+                IdCryptocurrency = cryptocurrency.IdCryptocurrency,
+                Code = cryptocurrency.Code,
+                Name = cryptocurrency.Name,
+                Price = cryptocurrency.Price,
+                CoinMarketCapId = cryptocurrency.CoinMarketCapId
+            };
+        }
     }
 }

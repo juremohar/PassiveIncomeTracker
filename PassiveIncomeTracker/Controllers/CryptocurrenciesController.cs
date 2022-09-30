@@ -37,5 +37,11 @@ namespace PassiveIncomeTracker.Controllers
         {
             return _cryptocurrenciesService.Get(model);
         }
+
+        [HttpGet("{idCryptocurrency}")]
+        public CryptocurrencyModel GetById(int idCryptocurrency)
+        {
+            return _cryptocurrenciesService.GetById(idCryptocurrency);
+        }
     }
 }
