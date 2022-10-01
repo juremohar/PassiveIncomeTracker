@@ -109,6 +109,12 @@ namespace PassiveIncomeTracker.Services
                 throw new UserException("Invalid interest payout param");
             }
 
+            var service = await _db.Services.FirstOrDefaultAsync(x => x.IdService == model.IdService);
+            if (service == null)
+            {
+                throw new UserException("Invalid service param");
+            }
+
             if (model.Amount <= 0) 
             {
                 throw new UserException("Invalid amount");
@@ -124,6 +130,7 @@ namespace PassiveIncomeTracker.Services
                 IdCryptocurrency = cryptocurrency.IdCryptocurrency,
                 IdUser = _authService.GetLoggedInUser().IdUser,
                 IdInterestPayout = model.IdInterestPayout,
+                IdService = model.IdService,
                 OriginalAmount = model.Amount,
                 CompoundedAmount = model.Amount,
                 InterestRate = model.InterestRate,
@@ -223,6 +230,7 @@ namespace PassiveIncomeTracker.Services
               .UsersInterests
               .Include(x => x.InterestPayout)
               .Include(x => x.Cryptocurrency)
+              .Include(x => x.Service)
               .Where(x => 
                 !x.DeletedAt.HasValue &&
                 x.IdCryptocurrency == idCryptocurrency &&
@@ -240,8 +248,15 @@ namespace PassiveIncomeTracker.Services
                     Code = x.InterestPayout.Code,
                     Title = x.InterestPayout.Title
                 },
+                Service = new ServiceModel 
+                {
+                    IdService = x.Service.IdService,
+                    Code = x.Service.Code,
+                    Title = x.Service.Title
+                },
                 Amount = x.OriginalAmount,
                 Rate = x.InterestRate,
+                Note = x.Note,
                 InsertedAt = x.InsertedAt
               })
               .ToListAsync();

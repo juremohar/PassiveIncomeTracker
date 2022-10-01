@@ -32,9 +32,9 @@ namespace PassiveIncomeTracker.Controllers
         }
 
         [HttpPatch("logout")]
-        public void Logout(string token)
+        public void Logout([FromBody] UserLogoutModel model)
         {
-            _userService.Logout(token);
+            _userService.Logout(model.Token);
         }
     }
 }

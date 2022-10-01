@@ -33,7 +33,7 @@ namespace PassiveIncomeTracker.Repositories
         {
             string payload = JsonConvert.SerializeObject(model);
 
-            return JWT.Encode(payload, _secretKey, JweAlgorithm.A256KW, JweEncryption.A256CBC_HS512);
+            return JWT.Encode(payload, _secretKey, JwsAlgorithm.HS256);
         }
     }
 }

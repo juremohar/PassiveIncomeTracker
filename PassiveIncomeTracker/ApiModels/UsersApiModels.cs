@@ -12,4 +12,9 @@
         public string Password { get; set; }
         public string PasswordRepeat { get; set; }
     }
+
+    public class UserLogoutModel 
+    {
+        public string Token { get; set; }
+    }
 }

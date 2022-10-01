@@ -6,4 +6,11 @@
         public string Code { get; set; }
         public string Title { get; set; }
     }
+
+    public class ServiceModel
+    {
+        public int IdService { get; set; }
+        public string Code { get; set; }
+        public string Title { get; set; }
+    }
 }

@@ -4,6 +4,7 @@
     {
         public int IdCryptoCurrency { get; set; }
         public int IdInterestPayout { get; set; }
+        public int IdService { get; set; }
         public double Amount { get; set; }
         public double InterestRate { get; set; }
         public string? Note { get; set; } 
@@ -55,8 +56,11 @@
         public int IdUserInterest { get; set; }
         public int IdCryptocurrency { get; set; }
         public InterestPayoutModel InterestPayout { get; set; }
+        public ServiceModel Service { get; set; }
         public double Amount { get; set; }
         public double Rate { get; set; }
+
+        public string? Note { get; set; }
         public DateTime InsertedAt { get; set; } 
     }
 }
