@@ -2,8 +2,9 @@
 
 namespace PassiveIncomeTracker.Interfaces
 {
-    public interface IServicesService
+    public interface ICodesService
     {
         List<ServiceModel> GetServices();
+        List<InterestPayoutModel> GetInterestsPayoutes();
     }
 }

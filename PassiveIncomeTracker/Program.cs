@@ -29,7 +29,7 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICryptocurrenciesService, CryptocurrenciesService>();
 
 builder.Services.AddTransient<IUserInterestService, UserInterestService>();
-builder.Services.AddTransient<IServicesService, ServicesService>();
+builder.Services.AddTransient<ICodesService, CodesService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuthService, AuthService>();
