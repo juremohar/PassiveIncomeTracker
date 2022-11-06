@@ -12,6 +12,8 @@
 
     public class UpdateUserInterestModel
     {
+        public int IdService { get; set; }
+        public int IdInterestPayout { get; set; }
         public double Amount { get; set; }
         public double InterestRate { get; set; }
         public string? Note { get; set; }

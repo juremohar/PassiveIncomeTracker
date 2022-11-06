@@ -143,10 +143,31 @@ namespace PassiveIncomeTracker.Services
 
         public async Task UpdateUserInterest(int id, UpdateUserInterestModel model)
         {
-            var userInterest = await _db.UsersInterests.FirstOrDefaultAsync(x => x.IdUserInterest == id);
+            var userInterest = await _db
+                .UsersInterests
+                .FirstOrDefaultAsync(x => x.IdUserInterest == id);
+
             if (userInterest == null)
             {
                 throw new UserException("Invalid idUserInterest param");
+            }
+
+            var service = await _db
+                .Services
+                .FirstOrDefaultAsync(x => x.IdService == model.IdService);
+
+            if (service == null) 
+            {
+                throw new UserException("Invalid idService param");
+            }
+
+            var interestPayout = await _db
+                .InterestPayouts
+                .FirstOrDefaultAsync(x => x.IdInterestPayout == model.IdInterestPayout);
+
+            if (interestPayout == null)
+            {
+                throw new UserException("Invalid idInterestPayout param");
             }
 
             if (model.Amount <= 0)
@@ -159,6 +180,8 @@ namespace PassiveIncomeTracker.Services
                 throw new UserException("Invalid interest");
             }
 
+            userInterest.IdService = model.IdService;
+            userInterest.IdInterestPayout = model.IdInterestPayout;
             userInterest.OriginalAmount = model.Amount;
             userInterest.InterestRate = model.InterestRate;
             userInterest.Note = model.Note;
