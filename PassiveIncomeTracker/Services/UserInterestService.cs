@@ -237,7 +237,9 @@ namespace PassiveIncomeTracker.Services
 
         public async Task<List<UserCryptoInputsModel>> GetUserCryptocurrencyInputs(int idUser, int idCryptocurrency) 
         {
-            var user = _db.Users.SingleOrDefault(x => x.IdUser == idUser);
+            var user = _db
+                .Users
+                .SingleOrDefault(x => x.IdUser == idUser);
 
             if (user == null)
             {
@@ -266,7 +268,14 @@ namespace PassiveIncomeTracker.Services
               .Select(x => new UserCryptoInputsModel 
               {
                 IdUserInterest = x.IdUserInterest,
-                IdCryptocurrency = x.IdCryptocurrency,
+                Cryptocurrency = new CryptocurrencyModel
+                {
+                    IdCryptocurrency = x.IdCryptocurrency,
+                    Code = x.Cryptocurrency.Code,
+                    Name = x.Cryptocurrency.Name,
+                    Price = x.Cryptocurrency.Price,
+                    CoinMarketCapId = x.Cryptocurrency.CoinMarketCapId
+                },
                 InterestPayout = new InterestPayoutModel 
                 {
                     IdInterestPayout = x.IdInterestPayout,
@@ -286,6 +295,59 @@ namespace PassiveIncomeTracker.Services
               })
               .ToListAsync();
 
+        }
+
+        public async Task<UserCryptoInputsModel> GetUserInterestById(int id)
+        {
+            var idUser = _authService
+                .GetLoggedInUser()
+                .IdUser;
+
+            var userInterest = await _db
+                .UsersInterests
+                .Include(x => x.Cryptocurrency)
+                .Include(x => x.Service)
+                .Include(x => x.InterestPayout)
+                .FirstOrDefaultAsync(x => x.IdUserInterest == id);
+
+            if (userInterest == null)
+            {
+                throw new UserException("Invalid idUserInterest param");
+            }
+
+            if (userInterest.IdUser != idUser) 
+            {
+                throw new UserException("You cannot access other users interests.");
+            }
+
+            return new UserCryptoInputsModel
+            {
+                IdUserInterest = userInterest.IdUserInterest,
+                Amount = userInterest.OriginalAmount,
+                Rate = userInterest.InterestRate,
+                Note = userInterest.Note,
+                InsertedAt = userInterest.InsertedAt,
+                Cryptocurrency = new CryptocurrencyModel 
+                {
+                    IdCryptocurrency = userInterest.IdCryptocurrency,
+                    Code = userInterest.Cryptocurrency.Code,
+                    Name = userInterest.Cryptocurrency.Name,
+                    Price = userInterest.Cryptocurrency.Price,
+                    CoinMarketCapId = userInterest.Cryptocurrency.CoinMarketCapId
+                },
+                InterestPayout = new InterestPayoutModel
+                {
+                    IdInterestPayout = userInterest.IdInterestPayout,
+                    Code = userInterest.InterestPayout.Code,
+                    Title = userInterest.InterestPayout.Title
+                },
+                Service = new ServiceModel
+                {
+                    IdService = userInterest.IdService,
+                    Title = userInterest.Service.Title,
+                    Code = userInterest.Service.Code
+                }
+            };
         }
     }
 }

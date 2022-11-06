@@ -24,6 +24,12 @@ namespace PassiveIncomeTracker.Controllers
             await _userInterestService.InsertUserInterest(model);
         }
 
+        [HttpGet("{id}")]
+        public async Task<UserCryptoInputsModel> Get(int id)
+        {
+            return await _userInterestService.GetUserInterestById(id);
+        }
+
         [HttpPut("{id}")]
         public async Task Put(int id, [FromBody] UpdateUserInterestModel model)
         {

@@ -54,12 +54,11 @@
     public class UserCryptoInputsModel 
     {
         public int IdUserInterest { get; set; }
-        public int IdCryptocurrency { get; set; }
+        public CryptocurrencyModel Cryptocurrency { get; set; }
         public InterestPayoutModel InterestPayout { get; set; }
         public ServiceModel Service { get; set; }
         public double Amount { get; set; }
         public double Rate { get; set; }
-
         public string? Note { get; set; }
         public DateTime InsertedAt { get; set; } 
     }
