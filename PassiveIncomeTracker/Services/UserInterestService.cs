@@ -166,6 +166,31 @@ namespace PassiveIncomeTracker.Services
             await _db.SaveChangesAsync();
         }
 
+        public async Task DeleteUserInterest(int id) 
+        {
+            var idUser = _authService
+                .GetLoggedInUser()
+                .IdUser;
+
+            var entity = _db
+                .UsersInterests
+                .SingleOrDefault(x => x.IdUserInterest == id);
+
+            if (entity == null)
+            {
+                throw new UserException("Invalid idUserInterest param");
+            }
+
+            if (entity.IdUser != idUser) 
+            {
+                throw new UserException("You cannot remove other user interests");
+            }
+
+            entity.DeletedAt = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync();
+        }
+
         public async Task CalculateUsersInterests()
         {
             var activeInterests = _db

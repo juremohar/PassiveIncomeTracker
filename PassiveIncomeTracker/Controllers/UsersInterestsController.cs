@@ -30,6 +30,12 @@ namespace PassiveIncomeTracker.Controllers
             await _userInterestService.UpdateUserInterest(id, model);
         }
 
+        [HttpDelete("{id}")]
+        public async Task Delete(int id)
+        {
+            await _userInterestService.DeleteUserInterest(id);
+        }
+
         [HttpGet("UserCryptoBalance/{idUser}")]
         public async Task<UserCryptosInterestsInformationModel> GetUserCryptoBalance(int idUser) 
         {
