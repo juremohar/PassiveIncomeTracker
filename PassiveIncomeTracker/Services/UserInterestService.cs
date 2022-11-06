@@ -35,7 +35,7 @@ namespace PassiveIncomeTracker.Services
             var userCryptosInterests = _db
                 .UsersInterests
                 .Include(x => x.Cryptocurrency)
-                .Where(x => x.IdUser == idUser)
+                .Where(x => x.IdUser == idUser && !x.DeletedAt.HasValue)
                 .AsQueryable();
 
             var groupedCryptosInterests = await userCryptosInterests
