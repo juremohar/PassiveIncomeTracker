@@ -23,8 +23,6 @@ namespace PassiveIncomeTracker.Services
 
         public bool Register(UserRegisterModel model)
         {
-            // TODO: add email validation, minimal password strength ...
-
             if (string.IsNullOrEmpty(model.Email))
                 throw new UserException("Missing param - email");
 
@@ -33,6 +31,10 @@ namespace PassiveIncomeTracker.Services
 
             if (string.IsNullOrEmpty(model.PasswordRepeat))
                 throw new UserException("Missing param - password repeat");
+
+            var country = _db.Countries.SingleOrDefault(x => x.IdCountry == model.IdCountry);
+            if (country == null)
+                throw new UserException("Invalid param - idCountry");
 
             var user = _db.Users.SingleOrDefault(x => x.Email == model.Email);
             if (user != null)
@@ -46,6 +48,7 @@ namespace PassiveIncomeTracker.Services
             var row = new TUser
             {
                 Email = model.Email,
+                IdCountry = model.IdCountry,
                 Password = SecurityHelper.HashPassword(model.Password, salt, 10101, 70),
                 Salt = salt
             };
