@@ -20,5 +20,6 @@ namespace PassiveIncomeTracker.DbModels
         public DbSet<TSession> Sessions { get;set; } 
         public DbSet<TCodeInterestPayout> InterestPayouts { get; set; }
         public DbSet<TService> Services { get; set; }
+        public DbSet<TCountry> Countries { get; set; }
     }
 }

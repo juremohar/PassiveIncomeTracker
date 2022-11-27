@@ -30,5 +30,11 @@ namespace PassiveIncomeTracker.Controllers
         {
             return _codesService.GetInterestsPayoutes();
         }
+
+        [HttpGet("countries")]
+        public List<CountryModel> GetCountries()
+        {
+            return _codesService.GetCountries();
+        }
     }
 }

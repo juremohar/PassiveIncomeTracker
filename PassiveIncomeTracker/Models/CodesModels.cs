@@ -13,4 +13,11 @@
         public string Code { get; set; }
         public string Title { get; set; }
     }
+
+    public class CountryModel
+    {
+        public int IdCountry { get; set; }
+        public string Short { get; set; }
+        public string Name { get; set; }
+    }
 }

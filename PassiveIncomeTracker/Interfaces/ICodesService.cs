@@ -6,5 +6,6 @@ namespace PassiveIncomeTracker.Interfaces
     {
         List<ServiceModel> GetServices();
         List<InterestPayoutModel> GetInterestsPayoutes();
+        List<CountryModel> GetCountries();
     }
 }

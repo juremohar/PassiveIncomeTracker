@@ -3,17 +3,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PassiveIncomeTracker.DbModels
 {
-    [Table("code_interest_payout")]
-    public class TCodeInterestPayout
+    [Table("countries")]
+    public class TCountry
     {
         [Key]
-        [Column("id_interest_payout")]
-        public int IdInterestPayout { get; set; }
+        [Column("id_country")]
+        public int IdCountry { get; set; }
 
-        [Column("code")]
-        public string Code { get; set; }
+        [Column("short")]
+        public string Short { get; set; }
 
-        [Column("title")]
-        public string Title { get; set; }
+        [Column("name")]
+        public string Name { get; set; }
+
     }
 }
