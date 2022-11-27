@@ -21,5 +21,6 @@ namespace PassiveIncomeTracker.DbModels
         public DbSet<TCodeInterestPayout> InterestPayouts { get; set; }
         public DbSet<TService> Services { get; set; }
         public DbSet<TCountry> Countries { get; set; }
+        public DbSet<TUserFavouriteCryptocurrency> UserFavouriteCryptocurrencies { get; set; }
     }
 }

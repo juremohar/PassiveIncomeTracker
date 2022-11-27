@@ -1,13 +1,9 @@
-﻿using PassiveIncomeTracker.ApiModels;
-using PassiveIncomeTracker.Models;
-
+﻿
 namespace PassiveIncomeTracker.Interfaces
 {
-    public interface ICryptocurrenciesService
+    public interface ICryptocurrenciesFavouritesService
     {
-        void Insert(InsertCryptocurrencyModel model);
-        Task UpdateCryptoWithLatestData();
-        List<CryptocurrencyModel> Get(GetCryptocurrenciesFilterModel model);
-        CryptocurrencyModel GetById(int idCryptocurrency);
+        void Follow(int idCryptocurrency);
+        void Unfollow(int idCryptocurrency);
     }
 }

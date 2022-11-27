@@ -30,6 +30,7 @@ builder.Services.AddTransient<ICryptocurrenciesService, CryptocurrenciesService>
 
 builder.Services.AddTransient<IUserInterestService, UserInterestService>();
 builder.Services.AddTransient<ICodesService, CodesService>();
+builder.Services.AddTransient<ICryptocurrenciesFavouritesService, CryptocurrenciesFavouritesService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuthService, AuthService>();

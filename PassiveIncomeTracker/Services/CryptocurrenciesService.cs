@@ -11,7 +11,6 @@ namespace PassiveIncomeTracker.Services
         private readonly DbApi _db;
         private readonly ICoinMarketCapService _coinMarketCapService;
 
-
         public CryptocurrenciesService
         (
             DbApi db,
