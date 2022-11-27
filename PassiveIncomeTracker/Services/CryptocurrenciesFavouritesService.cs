@@ -68,5 +68,18 @@ namespace PassiveIncomeTracker.Services
             _db.Remove(userFavouriteCryptocurrency);
             _db.SaveChanges();
         }
+
+        public List<int> GetUserFavourites() 
+        {
+            var user = _authService.GetLoggedInUser();
+            if (user == null)
+                throw new UserException("Invalid user");
+
+            return _db
+                .UserFavouriteCryptocurrencies
+                .Where(x => x.IdUser == user.IdUser)
+                .Select(x => x.IdCryptocurrency)
+                .ToList();
+        }
     }
 }

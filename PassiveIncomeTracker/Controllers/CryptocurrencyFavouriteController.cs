@@ -32,5 +32,11 @@ namespace PassiveIncomeTracker.Controllers
         {
             _cryptocurrenciesFavouritesService.Unfollow(idCryptocurrency);
         }
+
+        [HttpGet]
+        public List<int> GetUserFavourites()
+        {
+            return _cryptocurrenciesFavouritesService.GetUserFavourites();
+        }
     }
 }
