@@ -88,6 +88,10 @@ namespace PassiveIncomeTracker.Services
                 }
             }
 
+            groupedCryptosInterests = groupedCryptosInterests
+                .OrderByDescending(x => x.DifferrentIntervalsInterest.Yearly)
+                .ToList();
+
             return new UserCryptosInterestsInformationModel
             {
                 CryptosInterests = groupedCryptosInterests,
